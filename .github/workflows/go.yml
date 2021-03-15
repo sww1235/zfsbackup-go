@@ -44,6 +44,8 @@ jobs:
         cd $HOME/zfs
         pwd
         ls -lash
+        echo $PATH
+        which curl
         "curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/spl-${{matrix.rel}}.tar.gz"
         "curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/zfs-${{matrix.rel}}.tar.gz"
         ls -lash
