@@ -39,6 +39,7 @@ jobs:
     
     - name: Download ZFS
       run: |
+        ls -lash
         mkdir -p $HOME/zfs
         cd $HOME/zfs
         "curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/spl-${{matrix.rel}}.tar.gz"
