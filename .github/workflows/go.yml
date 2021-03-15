@@ -41,7 +41,7 @@ jobs:
       run: |
         mkdir -p $HOME/zfs
         cd $HOME/zfs
-        "[[ -d spl-${{matrix.rel}}.tar.gz ]] || curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/spl-${{matrix.rel}}.tar.gz | tar xz"
+        "[[ -d spl-${{matrix.rel}}.tar.gz ]] || curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/spl-${{matrix.rel}}.tar.gz | tar xz || true"
         "[[ -d zfs-${{matrix.rel}}.tar.gz ]] || curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/zfs-${{matrix.rel}}.tar.gz | tar xz"
         
     - name: Install SPL
@@ -61,10 +61,10 @@ jobs:
         export VDEV=$(mktemp)
         chmod +x ./travis-setup.sh && ./travis-setup.sh
 
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: $ {{ matrix.go }}
+    #- name: Set up Go
+     # uses: actions/setup-go@v2
+      #with:
+       # go-version: $ {{ matrix.go }}
         
     - name: Install go testing tools
       run: |
