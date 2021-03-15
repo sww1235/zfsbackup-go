@@ -13,8 +13,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        go: [1.13.x, 1.14.x, 1.15.x]
-        rel: [0.7.13]
+        go: ['1.13.x', '1.14.x', '1.15.x']
+        rel: ['0.7.13']
         
     env:
       AZURE_CUSTOM_ENDPOINT: http://127.0.0.1:10000/devstoreaccount1
