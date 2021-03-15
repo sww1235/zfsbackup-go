@@ -43,8 +43,9 @@ jobs:
         mkdir -p $HOME/zfs
         cd $HOME/zfs
         pwd
-        "wget https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/spl-${{matrix.rel}}.tar.gz"
-        "wget https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/zfs-${{matrix.rel}}.tar.gz"
+        ls -lash
+        "curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/spl-${{matrix.rel}}.tar.gz"
+        "curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/zfs-${{matrix.rel}}.tar.gz"
         ls -lash
         tar -xzf spl-${{matrix.rel}}.tar.gz
         tar -xzf zfs-${{matrix.rel}}.tar.gz
