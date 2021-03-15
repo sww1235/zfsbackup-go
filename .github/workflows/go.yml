@@ -41,16 +41,16 @@ jobs:
       run: |
         mkdir -p $HOME/zfs
         cd $HOME/zfs
-        "[[ -d spl-${{rel}}.tar.gz ]] || curl -L https://github.com/zfsonlinux/zfs/releases/download/zfs-${{rel}}/spl-${{rel}}.tar.gz | tar xz"
-        "[[ -d zfs-${{rel}}.tar.gz ]] || curl -L https://github.com/zfsonlinux/zfs/releases/download/zfs-${{rel}}/zfs-${{rel}}.tar.gz | tar xz"
+        "[[ -d spl-$rel.tar.gz ]] || curl -L https://github.com/zfsonlinux/zfs/releases/download/zfs-$rel/spl-$rel.tar.gz | tar xz"
+        "[[ -d zfs-rel.tar.gz ]] || curl -L https://github.com/zfsonlinux/zfs/releases/download/zfs-$rel/zfs-$rel.tar.gz | tar xz"
         
     - name: Install SPL
       run: |
-        cd spl-${{rel}} && ./configure --prefix=/usr && make && sudo make install
+        cd spl-$rel && ./configure --prefix=/usr && make && sudo make install
         
     - name: Install ZFS
       run: |
-        cd zfs-${{rel}} && ./configure --prefix=/usr && make && sudo make install
+        cd zfs-$rel && ./configure --prefix=/usr && make && sudo make install
     
     - name: Finish setup
       run: |
