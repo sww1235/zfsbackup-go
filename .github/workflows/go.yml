@@ -46,7 +46,7 @@ jobs:
         ls -lash
         which curl
         curl --version
-        "echo https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/spl-${{matrix.rel}}.tar.gz"
+        echo "https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/spl-${{matrix.rel}}.tar.gz"
         "/usr/bin/curl https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/spl-${{matrix.rel}}.tar.gz"
         "/usr/bin/curl https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/zfs-${{matrix.rel}}.tar.gz"
         ls -lash
