@@ -42,18 +42,18 @@ jobs:
         ls -lash
         mkdir -p $HOME/zfs
         cd $HOME/zfs
-        wget https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/spl-${{matrix.rel}}.tar.gz
-        wget -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/zfs-${{matrix.rel}}.tar.gz
+        curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/spl-${{matrix.rel}}.tar.gz | tar xz
+        curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/zfs-${{matrix.rel}}.tar.gz | tar xz
         ls -lash
-        tar -xzf spl-${{matrix.rel}}.tar.gz
-        tar -xzf zfs-${{matrix.rel}}.tar.gz
         
     - name: Install SPL
       run: |
+        cd $HOME/zfs
         cd spl-${{matrix.rel}} && ./configure --prefix=/usr && make && sudo make install
         
     - name: Install ZFS
       run: |
+        cd $HOME/zfs
         cd zfs-${{matrix.rel}} && ./configure --prefix=/usr && make && sudo make install
     
     - name: Finish setup
