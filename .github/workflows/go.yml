@@ -14,7 +14,8 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         go: ['1.13.x', '1.14.x', '1.15.x']
-        rel: ['0.7.13']
+        zfs-rel: ['0.7.13', '0.8.3', '2.0.4']
+      fail-fast: false
         
     env:
       AZURE_CUSTOM_ENDPOINT: http://127.0.0.1:10000/devstoreaccount1
@@ -36,41 +37,49 @@ jobs:
       run: |
         sudo apt-get -qq update
         sudo apt-get install -y linux-headers-`uname -r` tree uuid-dev libattr1-dev libblkid-dev jq gnupg2 xz-utils gzip curl
-    
-    - name: Download ZFS and SPL
-      run: |
-        ls -lash
-        mkdir -p $HOME/zfs
-        cd $HOME/zfs
-        curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/spl-${{matrix.rel}}.tar.gz | tar xz
-        curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.rel}}/zfs-${{matrix.rel}}.tar.gz | tar xz
-        ls -lash
+
+    - name: Create zfs directory
+      run: mkdir -p $HOME/zfs
         
-    - name: Install SPL
+    # not needed for versions of zfs > 0.7.3
+    - name: Download SPL
+      if: ${{matrix.zfs-rel = '0.7.3'}}
       run: |
         cd $HOME/zfs
-        cd spl-${{matrix.rel}} && ./configure --prefix=/usr && make && sudo make install
+        curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.zfs-rel}}/spl-${{matrix.zfs-rel}}.tar.gz | tar xz
+
+    - name: Download ZFS
+      run: |
+        cd $HOME/zfs
+        curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.zfs-rel}}/zfs-${{matrix.zfs-rel}}.tar.gz | tar xz
+
+    # not needed for versions of zfs > 0.7.3 
+    - name: Install SPL
+      if: ${{matrix.zfs-rel = '0.7.3'}}
+      run: |
+        cd $HOME/zfs
+        cd spl-${{matrix.zfs-rel}} && ./configure --prefix=/usr && make && sudo make install
 
     - name: Export autoconf logs
       if: failure()
       uses: actions/upload-artifact@v2
       with:
         name: spl-config.log
-        path: '~/zfs/spl-${{matrix.rel}}/config.log'
+        path: '~/zfs/spl-${{matrix.zfs-rel}}/config.log'
         if-no-files-found: error
 
         
     - name: Install ZFS
       run: |
         cd $HOME/zfs
-        cd zfs-${{matrix.rel}} && ./configure --prefix=/usr && make && sudo make install
+        cd zfs-${{matrix.zfs-rel}} && ./configure --prefix=/usr && make && sudo make install
 
     - name: Export autoconf logs
       if: failure()
       uses: actions/upload-artifact@v2
       with:
         name: zfs-config.log
-        path: '~/zfs/spl-${{matrix.rel}}/config.log'
+        path: '~/zfs/spl-${{matrix.zfs-rel}}/config.log'
         if-no-files-found: error
 
 
