@@ -99,8 +99,7 @@ jobs:
         
     - name: Build
       run: |
-        GO111MODULE=off go get github.com/mitchellh/gox
-        GO111MODULE=off go install github.com/mitchellh/gox
+        go install github.com/mitchellh/gox
         make get
         make build
 
