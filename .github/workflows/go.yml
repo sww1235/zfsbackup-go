@@ -43,7 +43,7 @@ jobs:
         
     # not needed for versions of zfs > 0.7.13
     - name: Download SPL
-      if: ${{matrix.zfs-rel == '0.7.33'}}
+      if: ${{matrix.zfs-rel == '0.7.13'}}
       run: |
         cd $HOME/zfs
         curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.zfs-rel}}/spl-${{matrix.zfs-rel}}.tar.gz | tar xz
@@ -99,6 +99,7 @@ jobs:
         
     - name: Build
       run: |
+        GO111MODULE=off go get github.com/mitchellh/gox
         GO111MODULE=off go install github.com/mitchellh/gox
         make get
         make build
