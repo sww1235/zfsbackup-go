@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        go: ['1.13.x', '1.14.x', '1.15.x']
+        go: ['1.13.15', '1.14.15', '1.15.10', '1.16.2']
         zfs-rel: ['0.7.13', '0.8.3', '2.0.4']
       fail-fast: false
         
@@ -92,29 +92,80 @@ jobs:
         export VDEV=$(mktemp)
         chmod +x ./travis-setup.sh && ./travis-setup.sh
 
-    #- name: Set up Go
-     # uses: actions/setup-go@v2
-      #with:
-       # go-version: $ {{ matrix.go }}
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: $ {{ matrix.go }}
         
-    - name: Install go testing tools
-      run: |
-        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $GOPATH/bin v1.24.0
-        GO111MODULE=off go get github.com/mattn/goveralls
-        GO111MODULE=off go get github.com/mitchellh/gox
-        make get
-
     - name: Build
       run: |
+        GO111MODULE=off go get github.com/mitchellh/gox
+        make get
         make build
 
     - name: Test
       run: |
         chmod +x ./integration_test.sh && ./integration_test.sh
-        sudo -E TMPDIR=$TMPDIR $(which go) test -race -v -coverprofile=coverage.out -covermode=atomic -coverpkg=$(go list ./... | grep -v '/vendor/' | paste -sd, -) ./...
-        make lint
+        #sudo -E TMPDIR=$TMPDIR $(which go) test -race -v -coverprofile=coverage.out -covermode=atomic -coverpkg=$(go list ./... | grep -v '/vendor/' | paste -sd, -) ./...
         
     - name: Cleanup
       run: |
-        sudo -E $GOPATH/bin/goveralls -coverprofile=coverage.out -service=travis-ci
         chmod +x ./travis-teardown.sh && ./travis-teardown.sh
+
+  lint:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        go: ['1.13.15', '1.14.15', '1.15.10', '1.16.2']
+        zfs-rel: ['0.7.13', '0.8.3', '2.0.4']
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+
+    - name: name: golangci-lint
+      uses: golangci/golangci-lint-action@v2
+      with:
+        version: latest
+
+ #test:
+ #  runs-on: ${{ matrix.os }}
+ #  strategy:
+ #    matrix:
+ #      os: [ubuntu-latest]
+ #      go: ['1.13.15', '1.14.15', '1.15.10', '1.16.2']
+ #      zfs-rel: ['0.7.13', '0.8.3', '2.0.4']
+
+ #  steps:
+ #    - name: Set up Go
+ #      uses: actions/setup-go@v1
+ #      with:
+ #        go-version: ${{matrix.go}}
+
+ #    - name: Check out code
+ #      uses: actions/checkout@v2
+ #                                                                          
+ #    - name: Install dependencies
+ #      run: go mod download
+ #      
+ #    - name: Run Unit tests
+ #      run: go test -race -covermode atomic -coverprofile=coverage.out ./...
+
+ #    - name: Install goveralls
+ #      env: 
+ #        GO111MODULE: off
+ #      run: go get github.com/mattn/goveralls
+ #      
+ #    - name: Send coverage
+ #      env:
+ #        COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+ #      run: goveralls -coverprofile=covprofile -service=github
+ #      # or use shogo82148/actions-goveralls
+ #      # - name: Send coverage
+ #      #   uses: shogo82148/actions-goveralls@v1
+ #      #   with:
+ #      #     path-to-profile: covprofile
+
+    
+
