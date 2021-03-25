@@ -43,7 +43,7 @@ jobs:
         
     # not needed for versions of zfs > 0.7.3
     - name: Download SPL
-      if: ${{matrix.zfs-rel = '0.7.3'}}
+      if: ${{matrix.zfs-rel == '0.7.3'}}
       run: |
         cd $HOME/zfs
         curl -L https://github.com/openzfs/zfs/releases/download/zfs-${{matrix.zfs-rel}}/spl-${{matrix.zfs-rel}}.tar.gz | tar xz
@@ -55,7 +55,7 @@ jobs:
 
     # not needed for versions of zfs > 0.7.3 
     - name: Install SPL
-      if: ${{matrix.zfs-rel = '0.7.3'}}
+      if: ${{matrix.zfs-rel == '0.7.3'}}
       run: |
         cd $HOME/zfs
         cd spl-${{matrix.zfs-rel}} && ./configure --prefix=/usr && make && sudo make install
