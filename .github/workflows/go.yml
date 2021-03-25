@@ -56,7 +56,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: spl-config.log
-        path: $HOME/zfs/spl-${{matrix.rel}}/config.log
+        path: '~/zfs/spl-${{matrix.rel}}/config.log'
         if-no-files-found: error
 
         
@@ -70,7 +70,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: zfs-config.log
-        path: $HOME/zfs/spl-${{matrix.rel}}/config.log
+        path: '~/zfs/spl-${{matrix.rel}}/config.log'
         if-no-files-found: error
 
 
